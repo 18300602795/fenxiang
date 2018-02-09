@@ -13,6 +13,7 @@ import com.etsdk.app.huov7.model.HomePage1Data;
 import com.etsdk.app.huov7.model.TjAdTop;
 import com.etsdk.app.huov7.provider.NetImageHolderView;
 import com.etsdk.app.huov7.shop.ui.MainShopActivity;
+import com.etsdk.app.huov7.ui.ChangeGameActivity;
 import com.etsdk.app.huov7.ui.CouponDetailActivity;
 import com.etsdk.app.huov7.ui.DownloadManagerActivity;
 import com.etsdk.app.huov7.ui.EarnActivity;
@@ -132,7 +133,8 @@ public class FindFragment extends AutoLazyFragment {
                 EarnActivity.start(mContext);
                 break;
             case R.id.apply_rl:
-                new CouponExchangeDialogUtil().showExchangeDialog(getActivity(), "友情提示", "该功能正在开发中，敬请期待");
+//                new CouponExchangeDialogUtil().showExchangeDialog(getActivity(), "友情提示", "该功能正在开发中，敬请期待");
+                ChangeGameActivity.start(mContext);
                 break;
             case R.id.deal_rl:
                 MainShopActivity.start(mContext);

@@ -34,6 +34,7 @@ import com.liang530.log.T;
 import com.liang530.photopicker.beans.SelectPhotoEvent;
 import com.liang530.rxvolley.HttpJsonCallBackDialog;
 import com.liang530.rxvolley.NetRequest;
+import com.liang530.utils.GlideDisplay;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -137,8 +138,8 @@ public class AccountManageActivity extends ImmerseActivity {
             errorImage = R.mipmap.touxiang;
         }
         tvNickName.setText(userInfoResultBean.getNickname());
-//        GlideDisplay.display(ivMineHead, userInfoResultBean.getPortrait(), errorImage);
-        Glide.with(AccountManageActivity.this).load(userInfoResultBean.getPortrait()).into(ivMineHead);
+        GlideDisplay.display(ivMineHead, userInfoResultBean.getPortrait(), errorImage);
+//        Glide.with(mContext).load(userInfoResultBean.getPortrait()).placeholder(errorImage).into(ivMineHead);
         if (TextUtils.isEmpty(userInfoResultBean.getMobile())) {
             tvBindMobile.setText("未设置");
             tvPhoneStatus.setText("绑定手机号");

@@ -8,6 +8,14 @@ public class SelectGameEvent {
     String gameId;
     String gameName;
     String gameIcon;
+    String type;
+
+    public SelectGameEvent(String gameId, String gameName, String gameIcon, String type) {
+        this.gameId = gameId;
+        this.gameName = gameName;
+        this.gameIcon = gameIcon;
+        this.type = type;
+    }
 
     public SelectGameEvent(String gameId, String gameName) {
         this.gameId = gameId;
@@ -18,6 +26,14 @@ public class SelectGameEvent {
         this.gameId = gameId;
         this.gameName = gameName;
         this.gameIcon = gameIcon;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getGameId() {

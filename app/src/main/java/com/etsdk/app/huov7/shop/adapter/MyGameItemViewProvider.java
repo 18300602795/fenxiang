@@ -3,6 +3,7 @@ package com.etsdk.app.huov7.shop.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +28,14 @@ import me.drakeet.multitype.ItemViewProvider;
 public class MyGameItemViewProvider
         extends ItemViewProvider<MyGameBean.DataBean.ListBean, MyGameItemViewProvider.ViewHolder> {
     MyGameListActivity myGameListActivity;
-
+    String type;
     public MyGameItemViewProvider(MyGameListActivity myGameListActivity) {
         this.myGameListActivity = myGameListActivity;
+    }
+
+    public MyGameItemViewProvider(MyGameListActivity myGameListActivity, String type) {
+        this.myGameListActivity = myGameListActivity;
+        this.type = type;
     }
 
     @NonNull
@@ -49,7 +55,12 @@ public class MyGameItemViewProvider
                     myGameListActivity.finish();
                     myGameListActivity = null;
                 }
-                EventBus.getDefault().post(new SelectGameEvent(gameBean.getId()+"", gameBean.getGamename(), gameBean.getIcon()));
+                if (TextUtils.isEmpty(type)){
+                    EventBus.getDefault().post(new SelectGameEvent(gameBean.getId()+"", gameBean.getGamename(), gameBean.getIcon()));
+                }else {
+                    EventBus.getDefault().post(new SelectGameEvent(gameBean.getId()+"", gameBean.getGamename(), gameBean.getIcon(), type));
+                }
+
             }
         });
         holder.tvName.setText(gameBean.getGamename());

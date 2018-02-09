@@ -47,7 +47,7 @@ public class MyGameListActivity extends ImmerseActivity implements AdvRefreshLis
     TextView tvTitleName;
     @BindView(R.id.swrefresh)
     SwipeRefreshLayout swrefresh;
-    private Items items=new Items();
+    private Items items = new Items();
     private MultiTypeAdapter multiTypeAdapter;
 
     @Override
@@ -57,13 +57,14 @@ public class MyGameListActivity extends ImmerseActivity implements AdvRefreshLis
         ButterKnife.bind(this);
         setupUI();
     }
+
     private void setupUI() {
         tvTitleName.setText("玩过的游戏");
         baseRefreshLayout = new MVCSwipeRefreshHelper(swrefresh);
         recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         // 设置适配器
         multiTypeAdapter = new MultiTypeAdapter(items);
-        multiTypeAdapter.register(MyGameBean.DataBean.ListBean.class, new MyGameItemViewProvider(this));
+        multiTypeAdapter.register(MyGameBean.DataBean.ListBean.class, new MyGameItemViewProvider(this, getIntent().getStringExtra("type")));
         baseRefreshLayout.setAdapter(multiTypeAdapter);
         baseRefreshLayout.setAdvRefreshListener(this);
         baseRefreshLayout.refresh();
@@ -76,10 +77,11 @@ public class MyGameListActivity extends ImmerseActivity implements AdvRefreshLis
 //        list.add(new GameBean());
 //        baseRefreshLayout.resultLoadData(items, list, 1);
     }
+
     @Override
     public void getPageData(final int requestPageNo) {
-        final BaseRequestBean requestBean =new BaseRequestBean();
-        HttpParamsBuild httpParamsBuild=new HttpParamsBuild(GsonUtil.getGson().toJson(requestBean));
+        final BaseRequestBean requestBean = new BaseRequestBean();
+        HttpParamsBuild httpParamsBuild = new HttpParamsBuild(GsonUtil.getGson().toJson(requestBean));
         HttpCallbackDecode httpCallbackDecode = new HttpCallbackDecode<MyGameBean.DataBean>(mContext, httpParamsBuild.getAuthkey()) {
             @Override
             public void onDataSuccess(final MyGameBean.DataBean data) {
@@ -88,24 +90,30 @@ public class MyGameListActivity extends ImmerseActivity implements AdvRefreshLis
             @Override
             public void onDataSuccess(MyGameBean.DataBean data, String code, String msg) {
                 super.onDataSuccess(data, code, msg);
-                if(data!=null&&data.getList().size()>0){
+                if (data != null && data.getList().size() > 0) {
 //                    int maxPage = (int)Math.ceil(data.getCount() / 10.);
-                    baseRefreshLayout.resultLoadData(items,data.getList(),1);
-                }else{
-                    baseRefreshLayout.resultLoadData(items,new ArrayList(),requestPageNo-1);
+                    baseRefreshLayout.resultLoadData(items, data.getList(), 1);
+                } else {
+                    baseRefreshLayout.resultLoadData(items, new ArrayList(), requestPageNo - 1);
                 }
             }
 
             @Override
             public void onFailure(String code, String msg) {
-                L.e(TAG, code+" "+msg);
-                baseRefreshLayout.resultLoadData(items,null,null);
+                L.e(TAG, code + " " + msg);
+                baseRefreshLayout.resultLoadData(items, null, null);
             }
         };
         httpCallbackDecode.setShowTs(true);
         httpCallbackDecode.setLoadingCancel(false);
         httpCallbackDecode.setShowLoading(false);
-        RxVolley.post(AppApi.getUrl(AppApi.dealAccountGetGames), httpParamsBuild.getHttpParams(),httpCallbackDecode);
+        RxVolley.post(AppApi.getUrl(AppApi.dealAccountGetGames), httpParamsBuild.getHttpParams(), httpCallbackDecode);
+    }
+
+    public static void start(Context context, String type) {
+        Intent starter = new Intent(context, MyGameListActivity.class);
+        starter.putExtra("type", type);
+        context.startActivity(starter);
     }
 
     public static void start(Context context) {
